@@ -49,12 +49,6 @@ async def main():
             final_response = event.content.parts[0].text
     print("Agent response:", final_response)
 
-    session = await session_service.get_session(
-        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
-    )
-    print("Session state:", session.state)
-
-
 if __name__ == "__main__":
     load_env()
     asyncio.run(main())

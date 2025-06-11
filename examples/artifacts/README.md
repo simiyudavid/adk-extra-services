@@ -27,10 +27,6 @@ graph TD
 ```
 <app_name>/<user_id>/<session_id>/<filename>/<version>
 ```
-If the filename uses a user namespace (starts with `user:`), the path becomes:
-```
-<app_name>/<user_id>/user/<filename>/<version>
-```
 
 ### Key Features
 - **Persistence:** Artifacts are stored durably in S3 or any S3-compatible backend, surviving application restarts and deployments.
