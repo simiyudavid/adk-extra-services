@@ -13,9 +13,22 @@ ADK Extra Services provides production-ready implementations of common services 
 pip install adk-extra-services
 ```
 
+## 🛠️ Development Setup
+
+If you want to contribute to the project or modify the source code, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/edu010101/adk-extra-services.git
+   cd adk-extra-services
+   ```
+
+2. Check out our [Contributing Guidelines](CONTRIBUTING.md) for detailed setup instructions and development workflow.
+
+
 ## 📖 Services
 
-### 🔄 Sessions
+### 🔄 [Sessions](examples/sessions/README.md)
 
 Persistent session storage implementations for ADK agents.
 
@@ -23,23 +36,42 @@ Persistent session storage implementations for ADK agents.
 - **MongoDBSessionService**: Persistent session storage using MongoDB
   ```python
   from adk_extra_services.sessions import MongoSessionService
+
+  mongo_service = MongoSessionService(
+    mongo_url="mongodb://your_mongo_uri:your_mongo_port",
+    db_name="adk_test"
+  )
   ```
 
 - **RedisSessionService**: High-performance session storage using Redis
   ```python
   from adk_extra_services.sessions import RedisSessionService
+
+  redis_service = RedisSessionService(redis_url="redis://your_redis_uri:your_redis_port")
   ```
 
 For complete usage examples and API documentation, see the [Sessions Guide](examples/sessions/README.md).
 
-### 📦 Artifacts
+### 📦 [Artifacts](examples/artifacts/README.md)
 
 Storage and management of agent artifacts.
 
 #### Available Services:
-- **S3ArtifactService**: Store and manage artifacts in AWS S3 or compatible storage
+- **S3ArtifactService**: Store and manage artifacts in AWS S3 or compatible storage (Compatible with MinIO, DigitalOcean Spaces, Wasabi, Backblaze B2, and others)
+
   ```python
   from adk_extra_services.artifacts import S3ArtifactService
+
+  s3_artifact_service = S3ArtifactService(
+    bucket_name="your_bucket_name",
+    endpoint_url="https://{your-bucket-name}.s3.{region}.amazonaws.com",
+  )
+  ```
+
+- **AzureBlobStorageService**: ⚙️ Store and manage artifacts in Azure Blob Storage (in development)
+  ```python
+  # Coming soon!
+  from adk_extra_services.artifacts import AzureBlobStorageService
   ```
 
 For complete usage examples and API documentation, see the [Artifacts Guide](examples/artifacts/README.md).
