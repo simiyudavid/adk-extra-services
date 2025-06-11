@@ -9,7 +9,7 @@ description = "Additional service implementations for Google ADK"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "Apache-2.0"}
-authors = [{name = "ADK Community", email = "community@adk-extensions.org"}]
+authors = [{name = "edu010101", email = "eduardo@geoia.tech"}]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -56,9 +56,9 @@ docs = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/youruser/adk-extra-services"
-"Source" = "https://github.com/youruser/adk-extra-services"
-"Documentation" = "https://github.com/youruser/adk-extra-services#readme"
+"Homepage" = "https://github.com/edu010101/adk-extra-services"
+"Source" = "https://github.com/edu010101/adk-extra-services"
+"Documentation" = "https://github.com/edu010101/adk-extra-services#readme"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
