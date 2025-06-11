@@ -22,6 +22,7 @@ classifiers = [
 ]
 dependencies = [
     "google-adk",
+    "google-generativeai>=0.8.5",
     "boto3>=1.28.0",
     "typing-extensions>=4.0.0",
     "motor>=3.3.0",
@@ -37,6 +38,7 @@ dev = [
     "flake8",
     "mypy",
     "isort",
+    "python-dotenv>=1.0.0",
 ]
 test = [
     "pytest>=8.0.0",
