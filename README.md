@@ -1,43 +1,54 @@
 # ADK Extra Services
 
-A Python package providing additional service implementations for the Google ADK framework. This package includes implementations for various services like artifacts, sessions, and memory that are not included in the core ADK package.
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Python Tests](https://github.com/edu010101/adk-extra-services/actions/workflows/ci.yml/badge.svg)](https://github.com/edu010101/adk-extra-services/actions/workflows/ci.yml)
 
-## Features
+> Extensions and additional services for the [Agent Development Kit (ADK)](https://github.com/google/adk-python)
 
-- **S3ArtifactService**: Store and manage artifacts using AWS S3 or compatible storage (like MinIO)
-- Future additions planned for sessions and memory services
+ADK Extra Services provides production-ready implementations of common services needed for building robust AI agents with the Google ADK framework.
 
-## Installation
+## 🚀 Installation
 
 ```bash
 pip install adk-extra-services
 ```
 
-## Examples
+## 📖 Services
 
-- **Artifacts**: Detailed guide and example for S3 artifacts in [examples/artifacts/README.md](examples/artifacts/README.md)
-- **Sessions**: Usage of session services in [examples/sessions/README.md](examples/sessions/README.md)
-- **Memory**: Usage of memory services in [examples/memory/README.md](examples/memory/README.md)
+### 🔄 Sessions
 
-## Development
+Persistent session storage implementations for ADK agents.
 
-### Setup
+#### Available Services:
+- **MongoDBSessionService**: Persistent session storage using MongoDB
+  ```python
+  from adk_extra_services.sessions import MongoSessionService
+  ```
 
-```bash
-# Clone the repository
-git clone https://github.com/edu010101/adk-extra-services.git
-cd adk-extra-services
+- **RedisSessionService**: High-performance session storage using Redis
+  ```python
+  from adk_extra_services.sessions import RedisSessionService
+  ```
 
-# Install in development mode
-pip install -e ".[dev]"
-```
+For complete usage examples and API documentation, see the [Sessions Guide](examples/sessions/README.md).
 
-### Running Tests
+### 📦 Artifacts
 
-```bash
-pytest
-```
+Storage and management of agent artifacts.
 
-## License
+#### Available Services:
+- **S3ArtifactService**: Store and manage artifacts in AWS S3 or compatible storage
+  ```python
+  from adk_extra_services.artifacts import S3ArtifactService
+  ```
 
-This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+For complete usage examples and API documentation, see the [Artifacts Guide](examples/artifacts/README.md).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+
