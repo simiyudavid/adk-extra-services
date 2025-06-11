@@ -1,10 +1,10 @@
-name: Python Simple CI
+name: Python CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -29,9 +29,9 @@ jobs:
       run: |
         uv venv .venv
         source .venv/bin/activate
-        uv sync --extra test --extra eval
+        uv pip install -e ".[test]"
 
-    - name: Run unit tests with pytest
+    - name: Run tests
       run: |
         source .venv/bin/activate
         pytest
