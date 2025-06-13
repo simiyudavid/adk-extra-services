@@ -19,13 +19,14 @@ import enum
 import pytest
 from google.genai import types
 
-from adk_extra_services.artifacts import S3ArtifactService
+from adk_extra_services.artifacts import S3ArtifactService, LocalFolderArtifactService
 
 Enum = enum.Enum
 
 
 class ArtifactServiceType(Enum):
     S3 = "S3"
+    LOCAL = "LOCAL"
 
 
 def mock_s3_artifact_service():
@@ -76,16 +77,20 @@ def mock_s3_artifact_service():
     return svc
 
 
-def get_artifact_service():
-    """Returns the mocked S3 artifact service."""
-    return mock_s3_artifact_service()
+def get_artifact_service(service_type: ArtifactServiceType, tmp_path):
+    """Returns an artifact service instance based on type."""
+    if service_type == ArtifactServiceType.S3:
+        return mock_s3_artifact_service()
+    if service_type == ArtifactServiceType.LOCAL:
+        return LocalFolderArtifactService(base_path=tmp_path)
+    raise ValueError(f"Unsupported service type: {service_type}")
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3])
-async def test_load_empty(service_type):
+@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3, ArtifactServiceType.LOCAL])
+async def test_load_empty(service_type, tmp_path):
     """Tests loading an artifact when none exists."""
-    artifact_service = get_artifact_service()
+    artifact_service = get_artifact_service(service_type, tmp_path)
     assert not await artifact_service.load_artifact(
         app_name="test_app",
         user_id="test_user",
@@ -95,10 +100,10 @@ async def test_load_empty(service_type):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3])
-async def test_save_load_delete(service_type):
+@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3, ArtifactServiceType.LOCAL])
+async def test_save_load_delete(service_type, tmp_path):
     """Tests saving, loading, and deleting an artifact."""
-    artifact_service = get_artifact_service()
+    artifact_service = get_artifact_service(service_type, tmp_path)
     artifact = types.Part.from_bytes(data=b"test_data", mime_type="text/plain")
     app_name = "app0"
     user_id = "user0"
@@ -137,10 +142,10 @@ async def test_save_load_delete(service_type):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3])
-async def test_list_keys(service_type):
+@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3, ArtifactServiceType.LOCAL])
+async def test_list_keys(service_type, tmp_path):
     """Tests listing keys in the artifact service."""
-    artifact_service = get_artifact_service()
+    artifact_service = get_artifact_service(service_type, tmp_path)
     artifact = types.Part.from_bytes(data=b"test_data", mime_type="text/plain")
     app_name = "app0"
     user_id = "user0"
@@ -166,10 +171,10 @@ async def test_list_keys(service_type):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3])
-async def test_list_versions(service_type):
+@pytest.mark.parametrize("service_type", [ArtifactServiceType.S3, ArtifactServiceType.LOCAL])
+async def test_list_versions(service_type, tmp_path):
     """Tests listing versions of an artifact."""
-    artifact_service = get_artifact_service()
+    artifact_service = get_artifact_service(service_type, tmp_path)
 
     app_name = "app0"
     user_id = "user0"

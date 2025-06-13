@@ -10,11 +10,13 @@ graph TD
     A[BaseArtifactService] --> B[InMemoryArtifactService]
     A --> C[GcsArtifactService]
     A --> D[S3ArtifactService]
+    A --> E[LocalFolderArtifactService]
     
     style A fill:#ffffff,stroke:#000000,stroke-width:1px,color:#000000
     style B fill:#f5f5f5,stroke:#666,stroke-width:1px,color:#000000
     style C fill:#f5f5f5,stroke:#666,stroke-width:1px,color:#000000
     style D fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000000
+    style E fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000000
 ```
 
 </div>
@@ -122,6 +124,47 @@ After MinIO is running and your bucket is created, you can run the example:
 ```bash
 python s3_artifact_example.py
 ```
+
+## LocalFolderArtifactService
+
+**Storage Mechanism:** Saves artifacts on the local filesystem. Each artifact version is stored as a regular file under a directory structure:
+
+```
+<base_path>/<app_name>/<user_id>/<session_id>/<filename>/<version>
+```
+
+**Key Features**
+- **Zero-setup:** No external services required—ideal for local development, unit tests, or small demos.
+- **Versioning:** Same incremental versioning strategy as other services.
+- **Isolation:** Works nicely with pytest temporary directories (`tmp_path`).
+
+### Instantiation
+
+```python
+from adk_extra_services.artifacts import LocalFolderArtifactService
+
+artifact_service = LocalFolderArtifactService(base_path="./artifacts_storage")
+```
+
+### Example: Using Local Storage
+
+1. **Prepare your environment:**
+   - `cd` into the `examples/artifacts` directory:
+     ```bash
+     cd examples/artifacts
+     ```
+   - Copy `.env.example` to `.env` (this file is shared with other examples):
+     ```bash
+     cp .env.example .env
+     ```
+   - Edit `.env` to add your Google API key (the local example does **not** require any additional credentials).
+
+2. **Run the example:**
+   ```bash
+   python local_folder_artifact_example.py
+   ```
+
+---
 
 ### Implementation Details
 

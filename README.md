@@ -66,6 +66,15 @@ Storage and management of agent artifacts.
     bucket_name="your_bucket_name",
     endpoint_url="https://{your-bucket-name}.s3.{region}.amazonaws.com",
   )
+  
+  ```
+
+- **LocalFolderArtifactService**: Lightweight local-filesystem storage ideal for development & testing environments.
+
+  ```python
+  from adk_extra_services.artifacts import LocalFolderArtifactService
+
+  artifact_service = LocalFolderArtifactService(base_path="./artifacts_storage")
   ```
 
 - **AzureBlobStorageService**: ⚙️ Store and manage artifacts in Azure Blob Storage (in development)
