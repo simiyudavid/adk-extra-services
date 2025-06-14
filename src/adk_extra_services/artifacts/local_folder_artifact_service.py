@@ -25,6 +25,10 @@ class LocalFolderArtifactService(BaseArtifactService):
     def _file_has_user_namespace(self, filename: str) -> bool:
         return filename.startswith("user:")
 
+    def _strip_user_prefix(self, filename: str) -> str:
+        """Remove the leading ``user:`` namespace marker, if present."""
+        return filename[len("user:") :] if self._file_has_user_namespace(filename) else filename
+
     def _get_file_path(
         self,
         app_name: str,
@@ -33,8 +37,10 @@ class LocalFolderArtifactService(BaseArtifactService):
         filename: str,
         version: int,
     ) -> Path:
+        """Translate a logical filename into an on-disk path."""
         if self._file_has_user_namespace(filename):
-            parts = [app_name, user_id, "user", filename, str(version)]
+            clean_name = self._strip_user_prefix(filename)
+            parts = [app_name, user_id, "user", clean_name, str(version)]
         else:
             parts = [app_name, user_id, session_id, filename, str(version)]
         return self.base_path.joinpath(*parts)
@@ -97,18 +103,44 @@ class LocalFolderArtifactService(BaseArtifactService):
     async def list_artifact_keys(
         self, *, app_name: str, user_id: str, session_id: str
     ) -> list[str]:
-        keys: set[str] = set()
-        session_dir = self.base_path / app_name / user_id / session_id
-        if session_dir.exists():
-            for filename_dir in session_dir.iterdir():
-                if filename_dir.is_dir():
-                    keys.add(filename_dir.name)
+        """Return all artifact filenames visible to the caller.
 
-        user_dir = self.base_path / app_name / user_id / "user"
-        if user_dir.exists():
-            for filename_dir in user_dir.iterdir():
-                if filename_dir.is_dir():
-                    keys.add(filename_dir.name)
+        This walks the on-disk directory tree and extracts the *logical*
+        filenames by stripping the version component from the stored path and,
+        for user-scoped artefacts, prepending the ``user:`` namespace.
+        """
+        keys: set[str] = set()
+
+        def _collect(prefix: Path, add_user_prefix: bool = False) -> None:
+            if not prefix.exists():
+                return
+            # Every stored artefact is saved under:
+            #   <prefix>/<filename_path_components...>/<version>
+            # where <version> is an integer file (not directory).  We therefore
+            # look for *files* directly under any depth whose names are ints.
+            for version_file in prefix.rglob("*"):
+                if not version_file.is_file():
+                    continue
+                try:
+                    int(version_file.name)
+                except ValueError:
+                    # Not a version file → skip
+                    continue
+                rel_parts = version_file.relative_to(prefix).parts[:-1]
+                if not rel_parts:
+                    # Malformed – skip
+                    continue
+                if rel_parts[0].startswith("user:"):
+                    rel_parts = (rel_parts[0][len("user:"):],) + rel_parts[1:]
+                logical_name = "/".join(rel_parts)
+                if add_user_prefix:
+                    logical_name = f"user:{logical_name}"
+                keys.add(logical_name)
+
+        # Session-scoped artefacts
+        _collect(self.base_path / app_name / user_id / session_id)
+        # User-scoped artefacts – prepend namespace
+        _collect(self.base_path / app_name / user_id / "user", add_user_prefix=True)
 
         return sorted(keys)
 
@@ -145,7 +177,7 @@ class LocalFolderArtifactService(BaseArtifactService):
         filename: str,
     ) -> list[int]:
         if self._file_has_user_namespace(filename):
-            dir_path = self.base_path / app_name / user_id / "user" / filename
+            dir_path = self.base_path / app_name / user_id / "user" / self._strip_user_prefix(filename)
         else:
             dir_path = self.base_path / app_name / user_id / session_id / filename
         if not dir_path.exists():
